@@ -1,4 +1,6 @@
     <?php
+    include('security.php');
+    $connection=mysqli_connect("localhost","root","","adminpanel");
     include('includes/header.php');
     include('includes/navbar.php');
     ?>
@@ -184,9 +186,10 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
-                                <img class="img-profile rounded-circle"
-                                    src="img/undraw_profile.svg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">
+                                       <?php    echo $_SESSION['username'];     ?>
+                                </span>
+                                <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -236,8 +239,15 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Earnings (Monthly)</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                Total Registered Admin</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                            <?php
+                                              $query = "SELECT id FROM register ORDER BY id";
+                                              $query_run = mysqli_query($connection, $query);
+                                              $row = mysqli_num_rows($query_run);
+                                              echo '<h4> Total Admin: '.$row.'</h4>';
+                                            ?>
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fas fa-calendar fa-2x text-gray-300"></i>
