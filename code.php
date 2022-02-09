@@ -126,4 +126,88 @@ if(isset($_POST['logout_btn']))
     unset($_SESSION['username']);
     header('Location: login.php');
 }
+//about us php code
+if(isset($_POST['about_save']))
+{
+   $title=$_POST['title'];
+   $subtitle=$_POST['subtitle'];
+   $description=$_POST['description'];
+   $links=$_POST['links'];
+
+   $query="INSERT INTO abouts(title,subtitle,description,links) VALUES('$title','$subtitle','$description','$links')";
+   $query_run=mysqli_query($connection,$query);
+   if($query_run){
+       $_SESSION['success']="About Us Added";
+      header('Location:aboutus.php');
+   }
+   else{
+    $_SESSION['status']="About Us Not Added";
+    header('Location:aboutus.php');
+   }
+}
+//about us update php code
+if(isset($_POST['updatebtn']))
+{
+  $id=$_POST['edit_id'];
+  $title=$_POST['edit_title'];
+  $subtitle=$_POST['edit_subtitle'];
+  $description=$_POST['edit_description'];
+  $links=$_POST['edit_links'];
+
+  $query="UPDATE abouts SET title='$title', subtitle='$subtitle', description='$description', links='$links' WHERE id='$id' ";
+  $query_run=mysqli_query($connection,$query);
+
+  if($query_run){
+      $_SESSION['success']="Your Data is Updated ";
+      header('Location:aboutus.php');
+  }
+  else{
+      $_SESSION['status']="Your Data isn't Updated";
+      header('Location:aboutus.php');
+  }
+}
+//about us delete php code
+if(isset($_POST['about_delete_btn']))
+{
+    $id=$_POST['delete_id'];
+    $query="DELETE FROM abouts WHERE id='$id' ";
+    $query_run=mysqli_query($connection,$query);
+    if($query_run){
+        $_SESSION['success']="Your Data is Deleted ";
+        header('Location:aboutus.php');
+    }
+    else{
+        $_SESSION['status']="Your Data isn't Deleted";
+        header('Location:aboutus.php');
+    }
+}
+//faculty php code
+if(isset($_POST['save_faculty']))
+{
+    $name=$_POST['faculty_name'];
+    $design=$_POST['faculty_designation'];
+    $description=$_POST['faculty_description'];
+    $images=$_FILES['faculty_image']['name'];
+
+    if(file_exists("upload/" .$_FILES["faculty_image"]["name"]))
+    {
+       $store=$_FILES['faculty_image']['name'];
+       $_SESSION['status']="Image Already Exists. '.$store.' ";
+       header('Location:faculty.php');
+    }
+  else{
+       $query="INSERT INTO faculty('name','design','descrip','images') VALUES('$name','$design','$description','$images')";
+       $query_run=mysqli_query($connection,$query);
+
+       if($query_run){
+          move_uploaded_file($_FILES["faculty_image"]["tmp_name"], "upload/".$_FILES["faculty_image"]["name"]);
+          $_SESSION['success']="Faculty Added";
+          header('Location:faculty.php');
+        }
+        else{
+        $_SESSION['status']="Faculty Not Added";
+        header('Location:faculty.php');
+        }
+     }
+}
 ?>
