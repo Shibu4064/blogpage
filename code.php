@@ -111,7 +111,7 @@ if(isset($_POST['login_btn']))
     else if($usertypes['usertype'] == "user")
     {
         $_SESSION['username'] = $email_login;
-        header('Location: ../index.html');
+        header('Location: ../index.php');
     }
     else
     {
