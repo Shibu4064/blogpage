@@ -15,13 +15,13 @@
                 </div>
                 <div class="card-body mt-3">
                  <?php
-                    if(isset($_SESSION['success']) && $_SESSION['success']!=''){
+                   if(isset($_SESSION['success']) && $_SESSION['success']!=''){
                         echo '<h2 class="bg-success text-white">' .$_SESSION['success'].'</h2>';
                         unset($_SESSION['success']);
                     }
                     if(isset($_SESSION['status']) && $_SESSION['status']!=''){
-                        echo '<h2 class="bg-info text-white">' .$_SESSION['status'].'</h2>';
-                        unset($_SESSION['status']);
+                        echo '<h2 class="bg-danger text-white">' .$_SESSION['status'].'</h2>';
+                       unset($_SESSION['status']);
                     }
 
                 ?>
@@ -30,8 +30,6 @@
               $connection=mysqli_connect("localhost","root","","adminpanel");
                 $query = "SELECT * FROM faculty";
                 $query_run = mysqli_query($connection, $query);
-                if(mysqli_num_rows($query_run) > 0)
-                        {
                 ?>
                 <table class="table table bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
@@ -46,18 +44,20 @@
                    </tr>
                 </thead>
                 <tbody>
-                <?php
-                    while($row = mysqli_fetch_assoc($query_run))
+                    <?php
+                        if(mysqli_num_rows($query_run) > 0)
+                        {
+                            while($row = mysqli_fetch_assoc($query_run))
                             {
-                        ?>
+                     ?>
                             <tr>
                                 <td><?php  echo $row['id'];   ?></td>
                                 <td><?php  echo $row['name'];   ?></td>
                                 <td><?php  echo $row['design'];   ?></td>
                                 <td><?php  echo $row['description'];   ?></td>
-                                <td><?php  echo $row['images'];   ?></td>
+                                <td> <?php echo '<img src="upload/' .$row['images']. '" width="100px;" height="100px;" alt="Image">' ?> </td>
                                 <td>
-                                    <form action="about_edit.php" method="post">
+                                    <form action="faculty_edit.php" method="post">
                                          <input type="hidden" name="edit_id" value="<?php echo $row['id']; ?>">
                                         <button type="submit" name="edit_btn" class="btn btn-success"> EDIT</button>
                                     </form>
@@ -65,7 +65,7 @@
                                 <td>
                                     <form action="code.php" method="post">
                                         <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                                        <button type="submit" name="about_delete_btn" class="btn btn-danger"> DELETE</button>
+                                        <button type="submit" name="faculty_delete_btn" class="btn btn-danger"> DELETE</button>
                                     </form>
                                 </td>
                             </tr>

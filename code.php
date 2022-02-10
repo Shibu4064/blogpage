@@ -173,11 +173,11 @@ if(isset($_POST['about_delete_btn']))
     $query="DELETE FROM abouts WHERE id='$id' ";
     $query_run=mysqli_query($connection,$query);
     if($query_run){
-        $_SESSION['success']="Your Data is Deleted ";
+        $_SESSION['success']="About Data is Deleted ";
         header('Location:aboutus.php');
     }
     else{
-        $_SESSION['status']="Your Data isn't Deleted";
+        $_SESSION['status']="About Data isn't Deleted";
         header('Location:aboutus.php');
     }
 }
@@ -189,14 +189,17 @@ if(isset($_POST['save_faculty']))
     $description=$_POST['faculty_description'];
     $images=$_FILES['faculty_image']['name'];
 
-    if(file_exists("upload/" .$_FILES["faculty_image"]["name"]))
-    {
-       $store=$_FILES['faculty_image']['name'];
-       $_SESSION['status']="Image Already Exists. '.$store.' ";
-       header('Location:faculty.php');
-    }
-  else{
-       $query="INSERT INTO faculty('name','design','descrip','images') VALUES('$name','$design','$description','$images')";
+    $img_types=array('image/jpg','image/png','image/jpeg','image/webp');
+    $validate_img_extension=in_array($_FILES["faculty_image"]['type'], $img_types);
+    if($validate_img_extension){
+       if(file_exists("upload/" .$_FILES["faculty_image"]["name"]))
+           {
+             $store=$_FILES['faculty_image']['name'];
+             $_SESSION['status']="Image Already Exists. '.$store.' ";
+             header('Location:faculty.php');
+           }
+       else{
+       $query="INSERT INTO faculty(name,design,description,images) VALUES('$name','$design','$description','$images')";
        $query_run=mysqli_query($connection,$query);
 
        if($query_run){
@@ -208,6 +211,91 @@ if(isset($_POST['save_faculty']))
         $_SESSION['status']="Faculty Not Added";
         header('Location:faculty.php');
         }
+      }
+    }
+    else{
+        $_SESSION['status']="Only PNG,JPG,JPEG,WEBP Images are allowed";
+        header('Location:faculty.php');
+    }
+}
+//faculty update php code
+if(isset($_POST['update_btn']))
+{
+  $edit_id=$_POST['edit_id'];
+  $edit_name=$_POST['edit_name'];
+  $edit_designation=$_POST['edit_designation'];
+  $edit_description=$_POST['edit_description'];
+  $edit_faculty_image=$_FILES['faculty_image']['name'];
+
+  $img_types=array('image/jpg','image/png','image/jpeg','image/webp');
+  $validate_img_extension=in_array($_FILES["faculty_image"]['type'], $img_types);
+
+  if($validate_img_extension){
+        $faculty_query="SELECT * FROM faculty WHERE id='$edit_id' ";
+         $faculty_query_run=mysqli_query($connection,$faculty_query);
+        foreach($faculty_query_run as $fa_row)
+        {
+             // echo $fa_row['images'];
+         if($edit_faculty_image==NULL)
+          {
+              //update with existing image
+             $image_data=$fa_row['images'];
+          }
+         else
+          {
+            //update with new image and delete with old image
+            if($img_path="upload/".$fa_row['images'])
+            {
+               unlink($img_path);
+               $image_data=$edit_faculty_image;
+            }
+          }
+       }
+
+  $query="UPDATE faculty SET name='$edit_name', design='$edit_designation', description='$edit_description', images='$image_data' WHERE id='$edit_id' ";
+  $query_run=mysqli_query($connection,$query);
+
+  if($query_run)
+  {
+        if($edit_faculty_image==NULL)
+        {
+           //update with existing image
+            $_SESSION['success']="Faculty Updated with existing image";
+           header('Location:faculty.php');
+         }
+      else
+      {
+          //update with new image and delete with old image
+        move_uploaded_file($_FILES["faculty_image"]["tmp_name"], "upload/".$_FILES["faculty_image"]["name"]);
+        $_SESSION['success']="Faculty Updated";
+         header('Location:faculty.php');
+       }
+    }
+  else
+     {
+      $_SESSION['status']="Faculty Not Updated";
+      header('Location:faculty.php');
      }
+  }
+  else{
+    $_SESSION['status']="Only PNG,JPG,JPEG,WEBP Images are allowed";
+    header('Location:faculty.php');
+    }
+}
+//faculty delete php code
+if(isset($_POST['faculty_delete_btn']))
+{
+    $id=$_POST['delete_id'];
+    $query="DELETE FROM faculty WHERE id='$id' ";
+    $query_run=mysqli_query($connection,$query);
+
+    if($query_run){
+        $_SESSION['success']="Faculty Data is Deleted ";
+        header('Location:faculty.php');
+    }
+    else{
+        $_SESSION['status']="Faculty Data isn't Deleted";
+        header('Location:faculty.php');
+    }
 }
 ?>
