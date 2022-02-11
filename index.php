@@ -239,7 +239,7 @@
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Registered Admin</div>
+                                                Total Registered Admin & User</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
                                               $query = "SELECT id FROM register ORDER BY id";

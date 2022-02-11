@@ -48,7 +48,7 @@ if(isset($_POST['registerbtn']))
 
 }
 //Update's php code
-if(isset($_POST['updatebtn']))
+if(isset($_POST['register_update_btn']))
 {
     $id = $_POST['edit_id'];
     $username = $_POST['edit_username'];
@@ -236,7 +236,7 @@ if(isset($_POST['update_btn']))
         foreach($faculty_query_run as $fa_row)
         {
              // echo $fa_row['images'];
-         if($edit_faculty_image==NULL)
+           if($edit_faculty_image==NULL)
           {
               //update with existing image
              $image_data=$fa_row['images'];
@@ -296,6 +296,122 @@ if(isset($_POST['faculty_delete_btn']))
     else{
         $_SESSION['status']="Faculty Data isn't Deleted";
         header('Location:faculty.php');
+    }
+}
+//department's php code
+if(isset($_POST['dept_save']))
+{
+    $name=$_POST['name'];
+    $description=$_POST['description'];
+    $images=$_FILES['dept_image']['name'];
+
+    $img_types=array('image/jpg','image/png','image/jpeg','image/webp');
+    $validate_img_extension=in_array($_FILES["dept_image"]['type'], $img_types);
+    if($validate_img_extension)
+    {
+       if(file_exists("upload/departments/" .$_FILES["dept_image"]["name"]))
+           {
+             $store=$_FILES['dept_image']['name'];
+             $_SESSION['status']="Image Already Exists. '.$store.' ";
+             header('Location:departments.php');
+           }
+       else{
+       $query="INSERT INTO dept_category(dept_name,description,images) VALUES('$name','$description','$images')";
+       $query_run=mysqli_query($connection,$query);
+
+       if($query_run){
+          move_uploaded_file($_FILES["dept_image"]["tmp_name"], "upload/departments/".$_FILES["dept_image"]["name"]);
+          $_SESSION['success']="Department Added";
+          header('Location:departments.php');
+        }
+        else{
+        $_SESSION['status']="Department Not Added";
+        header('Location:departments.php');
+        }
+      }
+    }
+    else{
+        $_SESSION['status']="Only PNG,JPG,JPEG,WEBP Images are allowed";
+        header('Location:departments.php');
+    }
+}
+//department's update php code
+if(isset($_POST['departments_update_btn']))
+{
+  $edit_id=$_POST['edit_id'];
+  $edit_name=$_POST['edit_name'];
+  $edit_description=$_POST['edit_description'];
+  $edit_departments_image=$_FILES['department_image']['name'];
+
+  $img_types=array('image/jpg','image/png','image/jpeg','image/webp');
+  $validate_img_extension=in_array($_FILES["department_image"]['type'], $img_types);
+
+  if($validate_img_extension){
+        $departments_query="SELECT * FROM dept_category WHERE id='$edit_id' ";
+         $departments_query_run=mysqli_query($connection,$departments_query);
+        foreach($departments_query_run as $fa_row)
+        {
+             // echo $fa_row['images'];
+           if($edit_departments_image==NULL)
+          {
+              //update with existing image
+             $image_data=$fa_row['images'];
+          }
+         else
+          {
+            //update with new image and delete with old image
+            if($img_path="upload/departments/".$fa_row['images'])
+            {
+               unlink($img_path);
+               $image_data=$edit_departments_image;
+            }
+          }
+       }
+
+  $query="UPDATE dept_category SET dept_name='$edit_name', description='$edit_description', images='$image_data' WHERE id='$edit_id' ";
+  $query_run=mysqli_query($connection,$query);
+
+  if($query_run)
+  {
+        if($edit_departments_image==NULL)
+        {
+           //update with existing image
+            $_SESSION['success']="Departments updated with existing image";
+           header('Location:departments.php');
+         }
+      else
+      {
+          //update with new image and delete with old image
+        move_uploaded_file($_FILES["department_image"]["tmp_name"], "upload/departments/".$_FILES["department_image"]["name"]);
+        $_SESSION['success']="Departments Updated";
+         header('Location:departments.php');
+       }
+    }
+  else
+     {
+      $_SESSION['status']="Departments Not Updated";
+      header('Location:departments.php');
+     }
+  }
+  else{
+    $_SESSION['status']="Only PNG,JPG,JPEG,WEBP Images are allowed";
+    header('Location:departments.php');
+    }
+}
+//department's delete php code
+if(isset($_POST['department_delete_btn']))
+{
+    $id=$_POST['delete_id'];
+    $query="DELETE FROM dept_category WHERE id='$id' ";
+    $query_run=mysqli_query($connection,$query);
+
+    if($query_run){
+        $_SESSION['success']="Department Data is Deleted ";
+        header('Location:departments.php');
+    }
+    else{
+        $_SESSION['status']="Department Data isn't Deleted";
+        header('Location:departments.php');
     }
 }
 ?>
