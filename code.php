@@ -414,4 +414,64 @@ if(isset($_POST['department_delete_btn']))
         header('Location:departments.php');
     }
 }
+//department category list php code
+if(isset($_POST['dept_list_save']))
+{
+    $dept_cate_id=$_POST['dept_cate_id'];
+    $name=$_POST['name'];
+    $description=$_POST['description'];
+    $section=$_POST['section'];
+
+    $query="INSERT INTO dept_category_list(dept_cate_id,name,description,section) VALUES('$dept_cate_id','$name','$description','$section') ";
+    $query_run=mysqli_query($connection,$query);
+
+    if($query_run)
+    {
+      $_SESSION['success']="Dept Category List is inserted";
+      header('Location:departments-list.php');
+    }
+    else
+    {
+       $_SESSION['status']="Dept Category List is not inserted";
+       header('Location:departments-list.php');
+    }
+}
+//department category list update php code
+if(isset($_POST['departments_list_update_btn']))
+{
+    $edit_id=$_POST['edit_id'];
+    $dept_cate_id=$_POST['dept_cate_id'];
+    $name=$_POST['name'];
+    $description=$_POST['description'];
+    $section=$_POST['section'];
+
+    $query="UPDATE dept_category_list SET dept_cate_id='$dept_cate_id', name='$name', description='$description', section='$section' WHERE id='$edit_id' ";
+    $query_run=mysqli_query($connection,$query);
+    if($query_run)
+    {
+        $_SESSION['success']="Dept Category List Updated";
+        header('Location:departments-list.php');
+    }
+    else
+    {
+        $_SESSION['status']="Dept Category List isn't Updated";
+        header('Location:departments-list.php');
+    }
+}
+//department category list delete php code
+if(isset($_POST['department_list_delete_btn']))
+{
+    $id=$_POST['delete_id'];
+    $query="DELETE FROM dept_category_list WHERE id='$id' ";
+    $query_run=mysqli_query($connection,$query);
+
+    if($query_run){
+        $_SESSION['success']="Department Category Data is Deleted ";
+        header('Location:departments-list.php');
+    }
+    else{
+        $_SESSION['status']="Department Category Data isn't Deleted";
+        header('Location:departments-list.php');
+    }
+}
 ?>
