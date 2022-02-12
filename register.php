@@ -14,17 +14,7 @@
                 </button>
                 </div>
                 <div class="card-body mt-3">
-                    <?php
-                    if(isset($_SESSION['success']) && $_SESSION['success']!=''){
-                        echo '<h2>' .$_SESSION['success'].'</h2>';
-                        unset($_SESSION['success']);
-                    }
-                    if(isset($_SESSION['status']) && $_SESSION['status']!=''){
-                        echo '<h2 class="bg-info text-white">' .$_SESSION['status'].'</h2>';
-                        unset($_SESSION['status']);
-                    }
 
-                ?>
          <div class="table-responsive">
              <?php
               $connection=mysqli_connect("localhost","root","","adminpanel");

@@ -14,3 +14,23 @@
     <!-- Page level custom scripts -->
     <script src="js/demo/chart-area-demo.js"></script>
     <script src="js/demo/chart-pie-demo.js"></script>
+
+    <!-- custom scripts  -->
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <?php
+                    if(isset($_SESSION['status']) && $_SESSION['status']!='')
+                    {
+                        ?>
+                        <script>
+                          swal({
+                            title: "<?php echo $_SESSION['status'] ; ?>",
+                         //   text: "You clicked the button!",
+                             icon: "<?php  echo $_SESSION['status_code']  ?>",
+                             button: "OK DONE!",
+                            });
+                         </script>
+                <?php
+                    unset($_SESSION['status']);
+                  }
+                 ?>
+ <script src="js/custom.js"></script>

@@ -2,6 +2,22 @@
 include('security.php');
 $connection=mysqli_connect("localhost","root","","adminpanel");
 //register's php code
+
+if(isset($_POST['check_submit_btn']))
+{
+     $email=$_POST['email_id'];
+     $email_query = "SELECT * FROM register WHERE email='$email' ";
+    $email_query_run = mysqli_query($connection, $email_query);
+    if(mysqli_num_rows($email_query_run) > 0)
+    {
+       echo "Email Already Exists. Please try another";
+    }
+    else
+    {
+        echo "It's Available";
+    }
+}
+
 if(isset($_POST['registerbtn']))
 {
     $username = $_POST['username'];
