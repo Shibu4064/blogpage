@@ -1,6 +1,5 @@
     <?php
-    include('security.php');
-    $connection=mysqli_connect("localhost","root","","adminpanel");
+    include('authentication.php');
     include('includes/header.php');
     include('includes/navbar.php');
     ?>
