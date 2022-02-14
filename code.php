@@ -17,7 +17,6 @@ if(isset($_POST['check_submit_btn']))
         echo "It's Available";
     }
 }
-
 if(isset($_POST['registerbtn']))
 {
     $username = $_POST['username'];
@@ -220,7 +219,7 @@ if(isset($_POST['save_faculty']))
 
        if($query_run){
           move_uploaded_file($_FILES["faculty_image"]["tmp_name"], "upload/".$_FILES["faculty_image"]["name"]);
-          $_SESSION['success']="Faculty Added";
+         $_SESSION['success']="Faculty Added";
           header('Location:faculty.php');
         }
         else{
