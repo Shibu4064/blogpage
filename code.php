@@ -131,6 +131,7 @@ if(isset($_POST['login_btn']))
     else
     {
         $_SESSION['status'] = "Email / Password is Invalid";
+        $_SESSION['status_code'] = "error";
         header('Location: login.php');
     }
 }

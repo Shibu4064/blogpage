@@ -28,7 +28,7 @@
                      <th>Username</th>
                      <th>Email</th>
                      <th>Password</th>
-                     <th>Usertype</th>
+                     <th>Status</th>
                      <th>Edit</th>
                      <th>Delete</th>
                    </tr>
