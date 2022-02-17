@@ -6,7 +6,7 @@ $connection=mysqli_connect("localhost","root","","adminpanel");
 if(isset($_POST['check_submit_btn']))
 {
      $email=$_POST['email_id'];
-     $email_query = "SELECT * FROM register WHERE email='$email' ";
+     $email_query = "SELECT * FROM users WHERE email='$email' ";
     $email_query_run = mysqli_query($connection, $email_query);
     if(mysqli_num_rows($email_query_run) > 0)
     {
@@ -23,9 +23,9 @@ if(isset($_POST['registerbtn']))
     $email = $_POST['email'];
     $password = $_POST['password'];
     $cpassword = $_POST['confirmpassword'];
-    $usertype = $_POST['usertype'];
+  //  $user_type = $_POST['user_type'];
 
-    $email_query = "SELECT * FROM register WHERE email='$email' ";
+    $email_query = "SELECT * FROM users WHERE email='$email' ";
     $email_query_run = mysqli_query($connection, $email_query);
     if(mysqli_num_rows($email_query_run) > 0)
     {
@@ -37,7 +37,7 @@ if(isset($_POST['registerbtn']))
     {
         if($password === $cpassword)
         {
-            $query = "INSERT INTO register (username,email,password,usertype) VALUES ('$username','$email','$password','$usertype')";
+            $query = "INSERT INTO users (username,email,password) VALUES ('$username','$email','$password')";
             $query_run = mysqli_query($connection, $query);
             if($query_run)
             {
@@ -67,11 +67,14 @@ if(isset($_POST['register_update_btn']))
 {
     $id = $_POST['edit_id'];
     $username = $_POST['edit_username'];
+    $fname=$_POST['edit_fname'];
+    $lname=$_POST['edit_lname'];
     $email = $_POST['edit_email'];
     $password = $_POST['edit_password'];
-    $usertypeupdate=$_POST['update_usertype'];
+    $role_as=$_POST['role_as'];
+   // $usertypeupdate=$_POST['update_usertype']; usertype='$usertypeupdate'
 
-    $query = "UPDATE register SET username='$username', email='$email', password='$password', usertype='$usertypeupdate' WHERE id='$id' ";
+    $query = "UPDATE users SET username='$username', fname='$fname', lname='$lname', email='$email', password='$password', role_as='$role_as' WHERE id='$id' ";
     $query_run = mysqli_query($connection, $query);
 
     if($query_run)
@@ -92,7 +95,7 @@ if(isset($_POST['delete_btn']))
 {
     $id = $_POST['delete_id'];
 
-    $query = "DELETE FROM register WHERE id='$id' ";
+    $query = "DELETE FROM users WHERE id='$id' ";
     $query_run = mysqli_query($connection, $query);
 
     if($query_run)
@@ -108,32 +111,56 @@ if(isset($_POST['delete_btn']))
         header('Location: register.php');
     }
 }
-//login's php code
 if(isset($_POST['login_btn']))
 {
     $email_login = $_POST['email'];
     $password_login = $_POST['password'];
 
-    $query = "SELECT * FROM register WHERE email='$email_login' AND password='$password_login' LIMIT 1";
+    $query = "SELECT * FROM users WHERE email='$email_login' AND password='$password_login' LIMIT 1";
     $query_run = mysqli_query($connection, $query);
-    $usertypes = mysqli_fetch_array($query_run);
 
-    if($usertypes['usertype'] == "admin")
+    if(mysqli_num_rows($query_run)>0)
     {
-        $_SESSION['username'] = $email_login;
-        header('Location: index.php');
-    }
-    else if($usertypes['usertype'] == "user")
-    {
-        $_SESSION['username'] = $email_login;
-        header('Location: ../index.php');
-    }
-    else
-    {
+      foreach($query_run as $data)
+       {
+          $user_id=$data['id'];
+          $user_name=$data['fname'].' '.$data['lname'];
+          $user_email=$data['email'];
+          $role_as=$data['role_as'];
+        }
+      $_SESSION['auth']=true;
+      $_SESSION['auth_role']="$role_as";  //1=admin, 0=user
+      $_SESSION['auth_user']=[
+          'user_id'=>$user_id,
+          'user_name'=>$user_name,
+          'user_email'=>$user_email,
+        ];
+       if($_SESSION['auth_role']=='1')
+       {
+           $_SESSION['status']="Welcome to dashboard";
+           $_SESSION['status_code']="success";
+           header('Location:blogpage/index.php');
+       }
+       elseif($_SESSION['auth_role']=='0')
+       {
+        $_SESSION['status']="Logging Successful";
+        $_SESSION['status_code']="success";
+        header('Location:index.php');
+       }
+       else
+       {
         $_SESSION['status'] = "Email / Password is Invalid";
-        $_SESSION['status_code'] = "error";
+        $_SESSION['status_code'] = "warning";
         header('Location: login.php');
+       }
     }
+   else
+   {
+    $_SESSION['status']="You are not allowed to access this file";
+    $_SESSION['status_code']="warning";
+    header('Location:login.php');
+   }
+
 }
 //logout's php code
 if(isset($_POST['logout_btn']))

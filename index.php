@@ -241,7 +241,7 @@
                                                 Total Registered Admin & User</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
-                                              $query = "SELECT id FROM register ORDER BY id";
+                                              $query = "SELECT id FROM users ORDER BY id";
                                               $query_run = mysqli_query($connection, $query);
                                               $row = mysqli_num_rows($query_run);
                                               echo '<h4> Total Admin: '.$row.'</h4>';

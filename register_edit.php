@@ -17,7 +17,7 @@ include('includes/navbar.php');
             if(isset($_POST['edit_btn']))
             {
                 $id = $_POST['edit_id'];
-                $query = "SELECT * FROM register WHERE id='$id' ";
+                $query = "SELECT * FROM users WHERE id='$id' ";
                 $query_run = mysqli_query($connection, $query);
 
                 foreach($query_run as $row)
@@ -34,6 +34,16 @@ include('includes/navbar.php');
                                     placeholder="Enter Username">
                             </div>
                             <div class="form-group">
+                                <label> First Name </label>
+                                <input type="text" name="edit_fname" value="<?php echo $row['fname'] ?>" class="form-control"
+                                    placeholder="Enter First name">
+                            </div>
+                            <div class="form-group">
+                                <label> Last Name </label>
+                                <input type="text" name="edit_lname" value="<?php echo $row['lname'] ?>" class="form-control"
+                                    placeholder="Enter Last name">
+                            </div>
+                            <div class="form-group">
                                 <label>Email</label>
                                 <input type="email" name="edit_email" value="<?php echo $row['email'] ?>" class="form-control"
                                     placeholder="Enter Email">
@@ -43,11 +53,12 @@ include('includes/navbar.php');
                                 <input type="password" name="edit_password" value="<?php echo $row['password'] ?>"
                                     class="form-control" placeholder="Enter Password">
                             </div>
-                            <div class="form-group">
-                                <label>Usertype</label>
-                                <select name="update_usertype" class="form-control">
-                                    <option value="admin">Admin</option>
-                                    <option value="user">User</option>
+                           <div class="form-group">
+                                <label for="">Role as</label>
+                                <select name="role_as" class="form-control">
+                                    <option value="">--Select Role--</option>
+                                    <option value="1" <?php echo $row['role_as']=='1' ? 'selected':''  ?> >Admin</option>
+                                    <option value="0" <?php echo $row['role_as']=='0' ? 'selected':''  ?> >User</option>
                                 </select>
                             </div>
 

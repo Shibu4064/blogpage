@@ -18,7 +18,7 @@
          <div class="table-responsive">
              <?php
               $connection=mysqli_connect("localhost","root","","adminpanel");
-                $query = "SELECT * FROM register";
+                $query = "SELECT * FROM users";
                 $query_run = mysqli_query($connection, $query);
              ?>
              <table class="table table bordered" id="dataTable" width="100%" cellspacing="0">
@@ -45,7 +45,16 @@
                                 <td><?php  echo $row['username']; ?></td>
                                 <td><?php  echo $row['email']; ?></td>
                                 <td><?php  echo $row['password']; ?></td>
-                                <td><?php  echo $row['usertype']; ?></td>
+                                <td>
+                                     <?php
+                                        if($row['role_as']=='1'){
+                                            echo 'Admin';
+                                        }
+                                        elseif($row['role_as']=='0'){
+                                            echo 'User';
+                                        }
+                                       ?>
+                                    </td>
                                 <td>
                                     <form action="register_edit.php" method="post">
                                         <input type="hidden" name="edit_id" value="<?php echo $row['id']; ?>">
@@ -111,7 +120,7 @@ include('includes/footer.php');
                 <label>Confirm Password</label>
                 <input type="password" name="confirmpassword" class="form-control" placeholder="Confirm Password">
             </div>
-            <input type="hidden" name="usertype" value="admin">
+          <!--  <input type="hidden" name="usertype" value="admin">  -->
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
