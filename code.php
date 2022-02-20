@@ -1,8 +1,9 @@
 <?php
+session_start();
 include('security.php');
 $connection=mysqli_connect("localhost","root","","adminpanel");
-//register's php code
 
+//register's php code
 if(isset($_POST['check_submit_btn']))
 {
      $email=$_POST['email_id'];
@@ -111,6 +112,7 @@ if(isset($_POST['delete_btn']))
         header('Location: register.php');
     }
 }
+// admin login php code
 if(isset($_POST['login_btn']))
 {
     $email_login = $_POST['email'];
@@ -126,6 +128,7 @@ if(isset($_POST['login_btn']))
           $user_id=$data['id'];
           $user_name=$data['fname'].' '.$data['lname'];
           $user_email=$data['email'];
+          $user_password=$data['password'];
           $role_as=$data['role_as'];
         }
       $_SESSION['auth']=true;
@@ -134,18 +137,19 @@ if(isset($_POST['login_btn']))
           'user_id'=>$user_id,
           'user_name'=>$user_name,
           'user_email'=>$user_email,
+          'user_password'=>$user_password,
         ];
        if($_SESSION['auth_role']=='1')
        {
            $_SESSION['status']="Welcome to dashboard";
            $_SESSION['status_code']="success";
-           header('Location:blogpage/index.php');
+           header('Location:index.php');
        }
        elseif($_SESSION['auth_role']=='0')
        {
         $_SESSION['status']="Logging Successful";
         $_SESSION['status_code']="success";
-        header('Location:index.php');
+        header('Location:../index.php');
        }
        else
        {
@@ -515,6 +519,33 @@ if(isset($_POST['department_list_delete_btn']))
     else{
         $_SESSION['status']="Department Category Data isn't Deleted";
         header('Location:departments-list.php');
+    }
+}
+//category-add php code
+if(isset($_POST['category_add']))
+{
+    $name=$_POST['name'];
+    $slug=$_POST['slug'];
+    $description=$_POST['description'];
+    $meta_title=$_POST['meta_title'];
+    $meta_description=$_POST['meta_description'];
+    $meta_keyword=$_POST['meta_keyword'];
+    $navbar_status=$_POST['navbar_status']==true ? '1':'0';
+    $status=$_POST['status']==true ? '1':'0';
+
+    $query="INSERT INTO categories(name, slug, description, meta_title, meta_description, meta_keyword, navbar_status, status)
+             VALUES('$name','$slug','$description','$meta_title','$meta_description','$meta_keyword','$navbar_status','$status')";
+    $query_run=mysqli_query($connection,$query);
+    if($query_run)
+    {
+        $_SESSION['status']="Category Added Successfully";
+        $_SESSION['status_code']="success";
+        header('Location: category-add.php');
+    }
+    else{
+        $_SESSION['status']="Something Went Wrong";
+        $_SESSION['status_code']="warning";
+        header('Location:category-add.php');
     }
 }
 ?>

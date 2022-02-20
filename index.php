@@ -1,5 +1,7 @@
     <?php
-    include('authentication.php');
+    session_start();
+   //include('authentication.php');
+   // include 'security.php';
     include('includes/header.php');
     include('includes/navbar.php');
     ?>
@@ -182,11 +184,12 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
+                        <?php if(isset($_SESSION['auth_user']))  : ?>
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">
-                                       <?php    echo $_SESSION['username'];     ?>
+                                       <?php    echo $_SESSION['auth_user']['user_name'];      ?>
                                 </span>
                                 <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                             </a>
@@ -210,9 +213,11 @@
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
+                                <?php  else :   ?>
                             </div>
+                            
                         </li>
-
+                        <?php endif;  ?>
                     </ul>
 
                 </nav>
@@ -241,6 +246,7 @@
                                                 Total Registered Admin & User</div>
                                             <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             <?php
+                                            $connection=mysqli_connect("localhost","root","","adminpanel");
                                               $query = "SELECT id FROM users ORDER BY id";
                                               $query_run = mysqli_query($connection, $query);
                                               $row = mysqli_num_rows($query_run);
