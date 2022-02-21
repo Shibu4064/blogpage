@@ -548,4 +548,54 @@ if(isset($_POST['category_add']))
         header('Location:category-add.php');
     }
 }
+//category update php code
+if(isset($_POST['category_update']))
+{
+    $category_id=$_POST['category_id'];
+    $name=$_POST['name'];
+    $slug=$_POST['slug'];
+    $description=$_POST['description'];
+    $meta_title=$_POST['meta_title'];
+    $meta_description=$_POST['meta_description'];
+    $meta_keyword=$_POST['meta_keyword'];
+    $navbar_status=$_POST['navbar_status']==true ? '1':'0';
+    $status=$_POST['status']==true ? '1':'0';
+
+    $query="UPDATE categories SET name='$name', slug='$slug', description='$description',
+            meta_title='$meta_title', meta_description='$meta_description', meta_keyword='$meta_keyword', 
+            navbar_status='$navbar_status', status='$status' WHERE id='$category_id' ";
+     $query_run=mysqli_query($connection,$query);
+
+     if($query_run)
+    {
+        $_SESSION['status']="Category Updated Successfully";
+        $_SESSION['status_code']="success";
+        header('Location: category-edit.php?id='.$category_id);
+    }
+    else{
+        $_SESSION['status']="Something Went Wrong";
+        $_SESSION['status_code']="warning";
+        header('Location:category-edit.php?id='.$category_id);
+    }
+}
+//category delete php code
+if(isset($_POST['category_delete']))
+{
+    $category_id=$_POST['category_delete'];
+    //2=deleted
+    $query="UPDATE categories SET status='2' WHERE id='$category_id' LIMIT 1 ";
+    $query_run=mysqli_query($connection,$query);
+
+    if($query_run)
+    {
+        $_SESSION['status']="Category Deleted Successfully";
+        $_SESSION['status_code']="success";
+        header('Location: category-view.php');
+    }
+    else{
+        $_SESSION['status']="Something Went Wrong";
+        $_SESSION['status_code']="warning";
+        header('Location:category-view.php');
+    }
+}
 ?>

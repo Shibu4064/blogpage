@@ -35,7 +35,7 @@ session_start();
                     <tbody>
                     <?php
                 $connection=mysqli_connect("localhost","root","","adminpanel");
-                $category="SELECT * FROM categories";
+                $category="SELECT * FROM categories WHERE status!='2' ";
                 $category_run=mysqli_query($connection,$category);
 
                 if(mysqli_num_rows($category_run)>0)
@@ -52,10 +52,12 @@ session_start();
                                 ?>
                             </td>
                             <td>
-                              <a href="" class="btn btn-info">Edit</a>
+                              <a href="category-edit.php?id=<?php echo $item['id'] ?>" class="btn btn-info">Edit</a>
                             </td>
                             <td>
-                              <a href="" class="btn btn-danger">Delete</a>
+                              <form action="code.php" method="POST">
+                              <button type="submit" name="category_delete" value="<?php echo $item['id'];  ?>" class="btn btn-danger">Delete</a>
+                              </form>
                             </td>
                         </tr>
                         <?php
