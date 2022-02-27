@@ -343,7 +343,7 @@
             </div>
             <!-- End of Main Content -->
 
- <?php
+<?php
 
 include('includes/script.php');
 include('includes/footer.php');
